@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhruvin Vasoya | Frontend Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050508',
+                        panel: '#0c0c14',
+                        'panel-light': '#111119',
+                        accent: '#8b5cf6',
+                        'accent-light': '#a78bfa',
+                        cyan: '#06b6d4',
+                        'cyan-light': '#22d3ee',
+                        gold: '#fbbf24',
+                        border: 'rgba(255,255,255,0.06)',
+                        'border-strong': 'rgba(255,255,255,0.12)',
+                        sub: '#7a7a8e',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{background:#050508;color:#d0d0e0;font-family:'Inter',sans-serif;overflow-x:hidden}
+
+        /* === PRELOADER === */
+        #preloader{position:fixed;inset:0;z-index:9999;background:#050508;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px}
+        .loader-ring{width:60px;height:60px;border:2px solid rgba(139,92,246,0.15);border-top:2px solid #8b5cf6;border-radius:50%;animation:spin 0.8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .loader-text{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:#8b5cf6;text-transform:uppercase}
+        .loader-percent{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:white}
+
+        /* === SCROLL PROGRESS === */
+        #scrollProgress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(to right,#8b5cf6,#06b6d4);z-index:100;transition:width 0.1s linear;box-shadow:0 0 8px rgba(139,92,246,0.6)}
+
+        /* === CURSOR === */
+        .cursor-dot{width:5px;height:5px;background:#8b5cf6;border-radius:50%;position:fixed;pointer-events:none;z-index:10000;box-shadow:0 0 10px rgba(139,92,246,0.8);transition:transform 0.1s}
+        .cursor-ring{width:36px;height:36px;border:1.5px solid rgba(139,92,246,0.4);border-radius:50%;position:fixed;pointer-events:none;z-index:10000;transition:all 0.2s cubic-bezier(0.16,1,0.3,1)}
+        .cursor-ring.hover{width:56px;height:56px;border-color:#8b5cf6;background:rgba(139,92,246,0.06);backdrop-filter:blur(2px)}
+        @media(max-width:768px){.cursor-dot,.cursor-ring{display:none}}
+
+        /* === BACKGROUNDS === */
+        .grid-bg{background-image:linear-gradient(to right,rgba(139,92,246,0.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(139,92,246,0.03) 1px,transparent 1px);background-size:60px 60px}
+        .radial-glow{background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,0.08) 0%,transparent 60%)}
+        .radial-glow-cyan{background:radial-gradient(ellipse at 80% 50%,rgba(6,182,212,0.06) 0%,transparent 50%)}
+
+        /* === GRADIENT TEXT === */
+        .gradient-text{background:linear-gradient(135deg,#a78bfa,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .gradient-text-gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+        /* === GLITCH === */
+        .glitch{position:relative;display:inline-block}
+        .glitch::before,.glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;background:#050508}
+        .glitch::before{left:2px;text-shadow:-2px 0 #06b6d4;animation:g1 4s infinite linear alternate-reverse}
+        .glitch::after{left:-2px;text-shadow:2px 0 #8b5cf6;animation:g2 4s infinite linear alternate-reverse}
+        @keyframes g1{0%{clip-path:inset(20% 0 80% 0)}10%{clip-path:inset(60% 0 10% 0)}20%{clip-path:inset(5% 0 70% 0)}30%{clip-path:inset(80% 0 5% 0)}40%{clip-path:inset(10% 0 60% 0)}50%{clip-path:inset(50% 0 30% 0)}60%{clip-path:inset(30% 0 40% 0)}70%{clip-path:inset(70% 0 15% 0)}80%{clip-path:inset(15% 0 55% 0)}90%{clip-path:inset(45% 0 25% 0)}100%{clip-path:inset(25% 0 50% 0)}}
+        @keyframes g2{0%{clip-path:inset(65% 0 15% 0)}10%{clip-path:inset(15% 0 55% 0)}20%{clip-path:inset(75% 0 5% 0)}30%{clip-path:inset(25% 0 50% 0)}40%{clip-path:inset(55% 0 20% 0)}50%{clip-path:inset(10% 0 65% 0)}60%{clip-path:inset(40% 0 35% 0)}70%{clip-path:inset(5% 0 80% 0)}80%{clip-path:inset(50% 0 30% 0)}90%{clip-path:inset(20% 0 60% 0)}100%{clip-path:inset(35% 0 45% 0)}}
+        @media(max-width:768px){.glitch::before,.glitch::after{display:none}}
+
+        /* === SCAN LINE === */
+        .scan-line{position:absolute;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,#8b5cf6,#06b6d4,transparent);opacity:0.3;animation:scanY 5s linear infinite;pointer-events:none}
+        @keyframes scanY{0%{top:-2%}100%{top:102%}}
+
+        /* === BUTTONS === */
+        .btn-primary{position:relative;overflow:hidden;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:14px 32px;border-radius:6px;border:none;cursor:pointer;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);box-shadow:0 0 20px rgba(139,92,246,0.3)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(139,92,246,0.5)}
+        .btn-primary:active{transform:translateY(0) scale(0.98)}
+        .btn-primary .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.3);transform:scale(0);animation:ripple 0.6s linear;pointer-events:none}
+        @keyframes ripple{to{transform:scale(4);opacity:0}}
+
+        .btn-outline{position:relative;overflow:hidden;color:#a78bfa;font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:14px 32px;border-radius:6px;border:1.5px solid rgba(139,92,246,0.4);background:transparent;cursor:pointer;transition:all 0.3s cubic-bezier(0.16,1,0.3,1)}
+        .btn-outline:hover{background:rgba(139,92,246,0.1);border-color:#8b5cf6;color:white;transform:translateY(-2px);box-shadow:0 0 20px rgba(139,92,246,0.2)}
+        .btn-outline:active{transform:translateY(0) scale(0.98)}
+        .btn-outline .ripple{position:absolute;border-radius:50%;background:rgba(139,92,246,0.3);transform:scale(0);animation:ripple 0.6s linear;pointer-events:none}
+
+        .btn-sm{padding:10px 24px;font-size:11px}
+
+        /* === NAV === */
+        .nav-link{position:relative;color:#7a7a8e;transition:color 0.3s}
+        .nav-link::after{content:'';position:absolute;bottom:-6px;left:50%;width:0;height:2px;background:linear-gradient(to right,#8b5cf6,#06b6d4);transition:all 0.3s;transform:translateX(-50%);border-radius:1px}
+        .nav-link:hover,.nav-link.active{color:white}
+        .nav-link:hover::after,.nav-link.active::after{width:100%}
+
+        /* === CARDS === */
+        .card{border:1px solid rgba(255,255,255,0.06);border-radius:12px;background:#0c0c14;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden}
+        .card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(139,92,246,0.05),transparent 60%);opacity:0;transition:opacity 0.4s}
+        .card:hover{border-color:rgba(139,92,246,0.3);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px rgba(139,92,246,0.1)}
+        .card:hover::before{opacity:1}
+
+        /* === PROJECT CARD === */
+        .project-card{border:1px solid rgba(255,255,255,0.06);border-radius:12px;background:#0c0c14;transition:all 0.5s cubic-bezier(0.16,1,0.3,1);cursor:pointer;overflow:hidden}
+        .project-card:hover{border-color:rgba(139,92,246,0.4);transform:translateY(-4px) scale(1.01);box-shadow:0 25px 50px rgba(0,0,0,0.5),0 0 40px rgba(139,92,246,0.1)}
+        .project-card .project-bg{position:absolute;inset:0;opacity:0;transition:opacity 0.5s}
+        .project-card:hover .project-bg{opacity:1}
+        .project-card .project-num{transition:all 0.4s}
+        .project-card:hover .project-num{color:#8b5cf6;text-shadow:0 0 30px rgba(139,92,246,0.5)}
+        .project-card .project-arrow{transition:all 0.4s}
+        .project-card:hover .project-arrow{transform:translateX(6px);color:#8b5cf6}
+        .project-card .project-tag{transition:all 0.3s}
+        .project-card:hover .project-tag{border-color:rgba(139,92,246,0.3);color:#a78bfa}
+
+        /* === SKILL BAR === */
+        .skill-fill{width:0%;height:100%;border-radius:99px;transition:width 1.5s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden}
+        .skill-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);animation:shimmer 2s infinite}
+        @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+        /* === TIMELINE === */
+        .timeline-line{width:2px;background:linear-gradient(to bottom,#8b5cf6,rgba(139,92,246,0.05))}
+        .timeline-dot{width:14px;height:14px;background:#050508;border:2px solid rgba(139,92,246,0.5);border-radius:50%;transition:all 0.4s;position:relative}
+        .timeline-dot.active{border-color:#8b5cf6;box-shadow:0 0 15px rgba(139,92,246,0.5)}
+        .timeline-dot.active::after{content:'';position:absolute;inset:3px;background:#8b5cf6;border-radius:50%;animation:pulse-dot 2s ease-in-out infinite}
+        @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.6)}}
+
+        /* === TYPING CURSOR === */
+        .type-cursor{display:inline-block;width:2px;height:1.1em;background:#8b5cf6;margin-left:2px;animation:blink-c 1s step-end infinite;vertical-align:text-bottom}
+        @keyframes blink-c{50%{opacity:0}}
+
+        /* === MARQUEE === */
+        .marquee-wrap{overflow:hidden;position:relative}
+        .marquee-wrap::before,.marquee-wrap::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2}
+        .marquee-wrap::before{left:0;background:linear-gradient(to right,#050508,transparent)}
+        .marquee-wrap::after{right:0;background:linear-gradient(to left,#050508,transparent)}
+        .marquee-track{display:flex;animation:marquee 25s linear infinite;width:max-content}
+        @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+        /* === FLOATING === */
+        .float{animation:floatY 4s ease-in-out infinite}
+        @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+        /* === MOBILE MENU === */
+        .mobile-overlay{position:fixed;inset:0;z-index:55;background:rgba(5,5,8,0.8);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity 0.4s}
+        .mobile-overlay.open{opacity:1;pointer-events:all}
+        .mobile-drawer{position:fixed;top:0;right:0;bottom:0;width:280px;z-index:60;background:#0c0c14;border-left:1px solid rgba(255,255,255,0.06);transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;padding:80px 32px 32px;gap:8px}
+        .mobile-drawer.open{transform:translateX(0)}
+        .mobile-drawer a{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:#7a7a8e;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.3s;display:block;text-decoration:none}
+        .mobile-drawer a:hover{color:white;padding-left:12px;border-color:rgba(139,92,246,0.3)}
+
+        /* === TOAST === */
+        .toast{position:fixed;bottom:32px;right:32px;z-index:200;padding:16px 24px;border-radius:10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;transform:translateY(100px);opacity:0;transition:all 0.5s cubic-bezier(0.16,1,0.3,1);pointer-events:none}
+        .toast.show{transform:translateY(0);opacity:1;pointer-events:all}
+        .toast-success{background:linear-gradient(135deg,#065f46,#064e3b);border:1px solid rgba(6,182,212,0.3);color:#6ee7b7}
+        .toast-error{background:linear-gradient(135deg,#7f1d1d,#6b1a1a);border:1px solid rgba(239,68,68,0.3);color:#fca5a5}
+
+        /* === INPUTS === */
+        .input-field{width:100%;background:#08080f;border:1.5px solid rgba(255,255,255,0.06);border-radius:8px;padding:14px 16px;font-size:14px;color:white;font-family:'Inter',sans-serif;transition:all 0.3s;outline:none}
+        .input-field::placeholder{color:rgba(122,122,142,0.5)}
+        .input-field:focus{border-color:rgba(139,92,246,0.5);box-shadow:0 0 0 3px rgba(139,92,246,0.1)}
+        .input-field.error{border-color:rgba(239,68,68,0.5);box-shadow:0 0 0 3px rgba(239,68,68,0.1)}
+        .error-msg{font-size:11px;color:#f87171;margin-top:4px;display:none;font-family:'JetBrains Mono',monospace}
+        .error-msg.show{display:block}
+
+        /* === SCROLLBAR === */
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-track{background:#050508}
+        ::-webkit-scrollbar-thumb{background:linear-gradient(to bottom,#8b5cf6,#06b6d4);border-radius:3px}
+
+        /* === REVEAL ANIMATIONS === */
+        .reveal{opacity:0;transform:translateY(30px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-left{opacity:0;transform:translateX(-40px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+        .reveal-left.visible{opacity:1;transform:translateX(0)}
+        .reveal-right{opacity:0;transform:translateX(40px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+        .reveal-right.visible{opacity:1;transform:translateX(0)}
+        .reveal-scale{opacity:0;transform:scale(0.85);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+        .reveal-scale.visible{opacity:1;transform:scale(1)}
+
+        /* === STATUS BADGE === */
+        .status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;position:relative}
+        .status-dot::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1px solid rgba(34,197,94,0.4);animation:ping-status 2s ease-out infinite}
+        @keyframes ping-status{0%{transform:scale(1);opacity:0.6}100%{transform:scale(2);opacity:0}}
+
+        /* === ORB === */
+        .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;animation:orb-float 8s ease-in-out infinite}
+        @keyframes orb-float{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-20px)}50%{transform:translate(-20px,30px)}75%{transform:translate(20px,20px)}}
+
+        /* === SECTION DIVIDER === */
+        .section-divider{height:1px;background:linear-gradient(to right,transparent,rgba(139,92,246,0.3),rgba(6,182,212,0.3),transparent)}
+    </style>
+</head>
+<body class="grid-bg">
+
+<!-- Preloader -->
+<div id="preloader">
+    <div class="loader-ring"></div>
+    <div class="loader-percent" id="loaderNum">0</div>
+    <div class="loader-text">Loading Portfolio</div>
+</div>
+
+<!-- Scroll Progress -->
+<div id="scrollProgress" style="width:0%"></div>
+
+<!-- Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Particles Canvas -->
+<canvas id="particlesBg" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
+
+<!-- Mobile Overlay -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<!-- Mobile Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+    <button id="closeDrawer" style="position:absolute;top:24px;right:24px;background:none;border:none;color:white;font-size:24px;cursor:pointer">
+        <iconify-icon icon="mdi:close"></iconify-icon>
+    </button>
+    <a href="#home" class="mobile-nav-link">Home</a>
+    <a href="#about" class="mobile-nav-link">About</a>
+    <a href="#skills" class="mobile-nav-link">Skills</a>
+    <a href="#experience" class="mobile-nav-link">Experience</a>
+    <a href="#projects" class="mobile-nav-link">Projects</a>
+    <a href="#contact" class="mobile-nav-link">Contact</a>
+    <div style="margin-top:auto;display:flex;gap:12px">
+        <a href="https://wa.me/917600764647" target="_blank" style="color:#7a7a8e;transition:color 0.3s" onmouseover="this.style.color='#8b5cf6'" onmouseout="this.style.color='#7a7a8e'"><iconify-icon icon="mdi:whatsapp" style="font-size:20px"></iconify-icon></a>
+        <a href="mailto:dhruvinvasoyawork@gmail.com" style="color:#7a7a8e;transition:color 0.3s" onmouseover="this.style.color='#8b5cf6'" onmouseout="this.style.color='#7a7a8e'"><iconify-icon icon="mdi:email-outline" style="font-size:20px"></iconify-icon></a>
+        <a href="#" target="_blank" style="color:#7a7a8e;transition:color 0.3s" onmouseover="this.style.color='#8b5cf6'" onmouseout="this.style.color='#7a7a8e'"><iconify-icon icon="mdi:github" style="font-size:20px"></iconify-icon></a>
+        <a href="#" target="_blank" style="color:#7a7a8e;transition:color 0.3s" onmouseover="this.style.color='#8b5cf6'" onmouseout="this.style.color='#7a7a8e'"><iconify-icon icon="mdi:linkedin" style="font-size:20px"></iconify-icon></a>
+    </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:50;height:72px;background:rgba(5,5,8,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.4s cubic-bezier(0.16,1,0.3,1)">
+    <div style="max-width:1280px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 24px">
+        <!-- Logo -->
+        <a href="#home" style="display:flex;align-items:center;gap:10px;text-decoration:none" class="logo-link">
+            <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);display:flex;align-items:center;justify-content:center">
+                <span style="color:white;font-family:'Space Grotesk';font-weight:700;font-size:14px">DV</span>
+            </div>
+            <span style="font-family:'Space Grotesk';font-weight:600;font-size:16px;color:white" class="hidden md:inline">Dhruvin<span style="color:#8b5cf6">.</span></span>
+        </a>
+        <!-- Desktop Links -->
+        <div style="display:flex;align-items:center;gap:32px" class="hidden md:flex">
+            <a href="#home" class="nav-link active" style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;text-decoration:none" data-section="home">Home</a>
+            <a href="#about" class="nav-link" style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;text-decoration:none" data-section="about">About</a>
+            <a href="#skills" class="nav-link" style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;text-decoration:none" data-section="skills">Skills</a>
+            <a href="#experience" class="nav-link" style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;text-decoration:none" data-section="experience">Experience</a>
+            <a href="#projects" class="nav-link" style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;text-decoration:none" data-section="projects">Projects</a>
+        </div>
+        <!-- Right -->
+        <div style="display:flex;align-items:center;gap:12px">
+            <a href="#contact" class="btn-primary btn-sm hidden md:inline-flex" style="text-decoration:none;display:none" id="navHireBtn">
+                <span>Hire Me</span>
+            </a>
+            <button id="openDrawer" style="md:hidden;background:none;border:none;color:white;font-size:24px;cursor:pointer;padding:4px;display:flex">
+                <iconify-icon icon="mdi:menu"></iconify-icon>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="home" style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:72px 24px 0;overflow:hidden">
+    <!-- Orbs -->
+    <div class="orb" style="width:400px;height:400px;background:rgba(139,92,246,0.08);top:10%;left:-5%;animation-delay:0s"></div>
+    <div class="orb" style="width:300px;height:300px;background:rgba(6,182,212,0.06);bottom:10%;right:-5%;animation-delay:3s"></div>
+    <div class="scan-line"></div>
+
+    <!-- Floating Badges -->
+    <div class="float" style="position:absolute;top:120px;left:24px;animation-delay:0s" id="badge1">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:99px;background:rgba(12,12,20,0.8);backdrop-filter:blur(8px)">
+            <div class="status-dot"></div>
+            <span style="font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.08em">Open to Work</span>
+        </div>
+    </div>
+    <div class="float" style="position:absolute;top:140px;right:32px;animation-delay:1.5s" id="badge2">
+        <div style="padding:8px 14px;border:1px solid rgba(255,255,255,0.06);border-radius:99px;background:rgba(12,12,20,0.8);backdrop-filter:blur(8px)">
+            <span style="font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.08em">React.js Specialist</span>
+        </div>
+    </div>
+
+    <div style="text-align:center;position:relative;z-index:10;max-width:900px">
+        <div class="reveal" style="transition-delay:0.1s">
+            <p style="font-family:'JetBrains Mono';font-size:11px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.2em;margin-bottom:28px">
+                <span style="display:inline-block;width:30px;height:1px;background:linear-gradient(to right,#8b5cf6,transparent);vertical-align:middle;margin-right:12px"></span>
+                Frontend Developer
+                <span style="display:inline-block;width:30px;height:1px;background:linear-gradient(to left,#8b5cf6,transparent);vertical-align:middle;margin-left:12px"></span>
+            </p>
+        </div>
+
+        <h1 class="reveal" style="font-family:'Space Grotesk';font-size:clamp(40px,8vw,96px);font-weight:700;line-height:0.95;letter-spacing:-0.03em;margin-bottom:24px;transition-delay:0.2s">
+            <span class="glitch" data-text="DHRUVIN" style="color:white">DHRUVIN</span><br>
+            <span class="gradient-text">VASOYA</span>
+        </h1>
+
+        <div class="reveal" style="transition-delay:0.35s">
+            <p style="font-size:clamp(14px,2vw,18px);color:#7a7a8e;max-width:550px;margin:0 auto 8px;line-height:1.7">
+                I build <span style="color:white;font-weight:500">pixel-perfect</span>, performant web apps
+            </p>
+            <p style="font-size:clamp(14px,2vw,18px);color:#7a7a8e;max-width:550px;margin:0 auto 40px;line-height:1.7">
+                powered by <span id="typeTarget" style="color:#8b5cf6;font-weight:500"></span><span class="type-cursor"></span>
+            </p>
+        </div>
+
+        <div class="reveal" style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;transition-delay:0.5s">
+            <a href="#projects" class="btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px" id="heroWorkBtn">
+                <span>View My Work</span>
+                <iconify-icon icon="mdi:arrow-down" style="font-size:16px"></iconify-icon>
+            </a>
+            <a href="#contact" class="btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px" id="heroContactBtn">
+                <span>Let's Connect</span>
+                <iconify-icon icon="mdi:arrow-right" style="font-size:16px"></iconify-icon>
+            </a>
+        </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="reveal" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;transition-delay:0.7s" id="scrollHint">
+        <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.15em">Scroll</span>
+        <div style="width:1px;height:32px;background:linear-gradient(to bottom,#8b5cf6,transparent);position:relative;overflow:hidden">
+            <div style="width:100%;height:8px;background:#8b5cf6;position:absolute;top:0;animation:scroll-pulse 2s ease-in-out infinite"></div>
+        </div>
+    </div>
+    <style>@keyframes scroll-pulse{0%{top:-8px;opacity:0}30%{opacity:1}100%{top:32px;opacity:0}}</style>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" style="border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);padding:16px 0;position:relative;z-index:5">
+    <div class="marquee-track">
+        <div style="display:flex;align-items:center;gap:40px;padding:0 20px;flex-shrink:0">
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">React.js</span>
+            <span style="color:#8b5cf6">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">JavaScript</span>
+            <span style="color:#06b6d4">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">Redux</span>
+            <span style="color:#8b5cf6">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">Material-UI</span>
+            <span style="color:#06b6d4">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">HTML5</span>
+            <span style="color:#8b5cf6">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">CSS3</span>
+            <span style="color:#06b6d4">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">Responsive Design</span>
+            <span style="color:#8b5cf6">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">Git</span>
+            <span style="color:#06b6d4">✦</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:40px;padding:0 20px;flex-shrink:0">
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">React.js</span>
+            <span style="color:#8b5cf6">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">JavaScript</span>
+            <span style="color:#06b6d4">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">Redux</span>
+            <span style="color:#8b5cf6">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">Material-UI</span>
+            <span style="color:#06b6d4">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">HTML5</span>
+            <span style="color:#8b5cf6">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">CSS3</span>
+            <span style="color:#06b6d4">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">Responsive Design</span>
+            <span style="color:#8b5cf6">✦</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap">Git</span>
+            <span style="color:#06b6d4">✦</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" style="position:relative;padding:96px 24px;overflow:hidden">
+    <div class="radial-glow" style="position:absolute;inset:0;pointer-events:none"></div>
+    <div style="max-width:1100px;margin:0 auto;position:relative;z-index:5">
+        <div style="display:grid;grid-template-columns:1fr;gap:48px;align-items:start" class="md-grid-2col">
+            <!-- Left -->
+            <div class="reveal-left">
+                <p style="font-family:'JetBrains Mono';font-size:10px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px">
+                    <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-right:8px"></span>01 — About
+                </p>
+                <h2 style="font-family:'Space Grotesk';font-size:clamp(28px,4vw,42px);font-weight:700;color:white;line-height:1.1;margin-bottom:32px">
+                    Know<br>Me<span style="color:#8b5cf6">.</span>
+                </h2>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div class="card" style="padding:20px;text-align:center">
+                        <div style="font-family:'Space Grotesk';font-size:32px;font-weight:700;color:white" class="counter" data-target="2">0</div>
+                        <div style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px">Years Exp</div>
+                    </div>
+                    <div class="card" style="padding:20px;text-align:center">
+                        <div style="font-family:'Space Grotesk';font-size:32px;font-weight:700;color:white" class="counter" data-target="6">0</div>
+                        <div style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px">Projects</div>
+                    </div>
+                    <div class="card" style="padding:20px;text-align:center">
+                        <div style="font-family:'Space Grotesk';font-size:32px;font-weight:700;color:white" class="counter" data-target="2">0</div>
+                        <div style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px">Companies</div>
+                    </div>
+                    <div class="card" style="padding:20px;text-align:center">
+                        <div style="font-family:'Space Grotesk';font-size:32px;font-weight:700;color:white" class="counter" data-target="3">0</div>
+                        <div style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px">Languages</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right -->
+            <div class="reveal-right">
+                <div class="card" style="padding:32px;position:relative;overflow:hidden">
+                    <div class="scan-line" style="animation-duration:7s"></div>
+                    <p style="font-size:14px;color:#7a7a8e;line-height:1.8;margin-bottom:16px">
+                        I'm a <span style="color:white;font-weight:500">Frontend Developer</span> with 2+ years of hands-on experience building scalable and interactive web applications using <span style="color:#8b5cf6">React.js</span>. I specialize in component-based architecture, state management with Redux, and creating responsive UIs with Material-UI.
+                    </p>
+                    <p style="font-size:14px;color:#7a7a8e;line-height:1.8;margin-bottom:16px">
+                        I believe in writing <span style="color:white;font-weight:500">clean, maintainable code</span> and delivering pixel-perfect interfaces that provide seamless user experiences.
+                    </p>
+                    <p style="font-size:14px;color:#7a7a8e;line-height:1.8;margin-bottom:24px">
+                        Currently expanding my expertise in <span style="color:#06b6d4">modern JS ecosystems</span>, performance optimization, and exploring Next.js.
+                    </p>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                        <span style="padding:6px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:99px;font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.05em">React.js</span>
+                        <span style="padding:6px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:99px;font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.05em">JavaScript</span>
+                        <span style="padding:6px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:99px;font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.05em">Redux</span>
+                        <span style="padding:6px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:99px;font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.05em">Material-UI</span>
+                        <span style="padding:6px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:99px;font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.05em">HTML5</span>
+                        <span style="padding:6px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:99px;font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.05em">CSS3</span>
+                        <span style="padding:6px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:99px;font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.05em">Git</span>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="card" style="padding:32px;margin-top:16px">
+                    <h3 style="font-size:14px;font-weight:600;color:white;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:24px;display:flex;align-items:center;gap:10px">
+                        <iconify-icon icon="mdi:school-outline" style="color:#8b5cf6;font-size:20px"></iconify-icon>
+                        Education
+                    </h3>
+                    <div style="display:flex;flex-direction:column;gap:20px">
+                        <div style="display:flex;gap:16px;align-items:flex-start">
+                            <div style="width:10px;height:10px;border-radius:50%;background:#8b5cf6;margin-top:5px;flex-shrink:0;box-shadow:0 0 8px rgba(139,92,246,0.5)"></div>
+                            <div>
+                                <p style="font-size:14px;font-weight:500;color:white">Diploma in Computer Engineering</p>
+                                <p style="font-size:12px;color:#7a7a8e;margin-top:2px">Parul Polytechnic Institute, Vadodara</p>
+                                <p style="font-family:'JetBrains Mono';font-size:10px;color:#8b5cf6;margin-top:4px">2018 — 2021</p>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:16px;align-items:flex-start">
+                            <div style="width:10px;height:10px;border-radius:50%;background:rgba(139,92,246,0.3);margin-top:5px;flex-shrink:0"></div>
+                            <div>
+                                <p style="font-size:14px;font-weight:500;color:white">Frontend Web Development</p>
+                                <p style="font-size:12px;color:#7a7a8e;margin-top:2px">Coding Cloud Institute</p>
+                                <p style="font-family:'JetBrains Mono';font-size:10px;color:#8b5cf6;margin-top:4px">Certification</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SKILLS ===== -->
+<section id="skills" style="position:relative;padding:96px 24px;overflow:hidden">
+    <div class="radial-glow-cyan" style="position:absolute;inset:0;pointer-events:none"></div>
+    <div style="max-width:1100px;margin:0 auto;position:relative;z-index:5">
+        <div style="text-align:center;margin-bottom:64px" class="reveal">
+            <p style="font-family:'JetBrains Mono';font-size:10px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px">
+                <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-right:8px"></span>02 — Skills
+                <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-left:8px"></span>
+            </p>
+            <h2 style="font-family:'Space Grotesk';font-size:clamp(28px,4vw,42px);font-weight:700;color:white">My Arsenal<span style="color:#8b5cf6">.</span></h2>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px">
+            <!-- Skill Cards -->
+            <div class="card reveal-left" style="padding:28px;transition-delay:0s" data-skill>
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+                    <div style="width:44px;height:44px;border-radius:10px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);display:flex;align-items:center;justify-content:center">
+                        <iconify-icon icon="logos:react" style="font-size:22px"></iconify-icon>
+                    </div>
+                    <div style="flex:1">
+                        <h4 style="font-size:14px;font-weight:600;color:white">React.js</h4>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.08em">Primary Framework</p>
+                    </div>
+                    <span style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:#8b5cf6">90%</span>
+                </div>
+                <div style="width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+                    <div class="skill-fill" data-width="90%" style="background:linear-gradient(to right,#8b5cf6,#a78bfa);box-shadow:0 0 12px rgba(139,92,246,0.4)"></div>
+                </div>
+                <p style="font-size:12px;color:#7a7a8e;margin-top:14px;line-height:1.6">Hooks, Virtual DOM, Router, Component Architecture</p>
+            </div>
+
+            <div class="card reveal-right" style="padding:28px;transition-delay:0.08s" data-skill>
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+                    <div style="width:44px;height:44px;border-radius:10px;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.2);display:flex;align-items:center;justify-content:center">
+                        <iconify-icon icon="logos:javascript" style="font-size:22px"></iconify-icon>
+                    </div>
+                    <div style="flex:1">
+                        <h4 style="font-size:14px;font-weight:600;color:white">JavaScript</h4>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.08em">Core Language</p>
+                    </div>
+                    <span style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:#eab308">85%</span>
+                </div>
+                <div style="width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+                    <div class="skill-fill" data-width="85%" style="background:linear-gradient(to right,#eab308,#facc15);box-shadow:0 0 12px rgba(234,179,8,0.4)"></div>
+                </div>
+                <p style="font-size:12px;color:#7a7a8e;margin-top:14px;line-height:1.6">ES6+, Async/Await, DOM, Closures, Prototypes</p>
+            </div>
+
+            <div class="card reveal-left" style="padding:28px;transition-delay:0.16s" data-skill>
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+                    <div style="width:44px;height:44px;border-radius:10px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);display:flex;align-items:center;justify-content:center">
+                        <iconify-icon icon="logos:redux" style="font-size:22px"></iconify-icon>
+                    </div>
+                    <div style="flex:1">
+                        <h4 style="font-size:14px;font-weight:600;color:white">Redux</h4>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.08em">State Management</p>
+                    </div>
+                    <span style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:#a855f7">80%</span>
+                </div>
+                <div style="width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+                    <div class="skill-fill" data-width="80%" style="background:linear-gradient(to right,#a855f7,#c084fc);box-shadow:0 0 12px rgba(168,85,247,0.4)"></div>
+                </div>
+                <p style="font-size:12px;color:#7a7a8e;margin-top:14px;line-height:1.6">Redux Toolkit, createSlice, Async Thunks</p>
+            </div>
+
+            <div class="card reveal-right" style="padding:28px;transition-delay:0.24s" data-skill>
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+                    <div style="width:44px;height:44px;border-radius:10px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);display:flex;align-items:center;justify-content:center">
+                        <iconify-icon icon="logos:material-ui" style="font-size:22px"></iconify-icon>
+                    </div>
+                    <div style="flex:1">
+                        <h4 style="font-size:14px;font-weight:600;color:white">Material-UI</h4>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.08em">UI Library</p>
+                    </div>
+                    <span style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:#3b82f6">85%</span>
+                </div>
+                <div style="width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+                    <div class="skill-fill" data-width="85%" style="background:linear-gradient(to right,#3b82f6,#60a5fa);box-shadow:0 0 12px rgba(59,130,246,0.4)"></div>
+                </div>
+                <p style="font-size:12px;color:#7a7a8e;margin-top:14px;line-height:1.6">MUI Components, Theme, DataGrid, Responsive</p>
+            </div>
+
+            <div class="card reveal-left" style="padding:28px;transition-delay:0.32s" data-skill>
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+                    <div style="width:44px;height:44px;border-radius:10px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);display:flex;align-items:center;justify-content:center">
+                        <iconify-icon icon="logos:html-5" style="font-size:22px"></iconify-icon>
+                    </div>
+                    <div style="flex:1">
+                        <h4 style="font-size:14px;font-weight:600;color:white">HTML5 / CSS3</h4>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.08em">Foundation</p>
+                    </div>
+                    <span style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:#f97316">92%</span>
+                </div>
+                <div style="width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+                    <div class="skill-fill" data-width="92%" style="background:linear-gradient(to right,#f97316,#fb923c);box-shadow:0 0 12px rgba(249,115,22,0.4)"></div>
+                </div>
+                <p style="font-size:12px;color:#7a7a8e;margin-top:14px;line-height:1.6">Semantic HTML, Flexbox, Grid, Animations, SASS</p>
+            </div>
+
+            <div class="card reveal-right" style="padding:28px;transition-delay:0.4s" data-skill>
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+                    <div style="width:44px;height:44px;border-radius:10px;background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.2);display:flex;align-items:center;justify-content:center">
+                        <iconify-icon icon="logos:git-icon" style="font-size:22px"></iconify-icon>
+                    </div>
+                    <div style="flex:1">
+                        <h4 style="font-size:14px;font-weight:600;color:white">Git & Tools</h4>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.08em">Workflow</p>
+                    </div>
+                    <span style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:#ec4899">75%</span>
+                </div>
+                <div style="width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+                    <div class="skill-fill" data-width="75%" style="background:linear-gradient(to right,#ec4899,#f472b6);box-shadow:0 0 12px rgba(236,72,153,0.4)"></div>
+                </div>
+                <p style="font-size:12px;color:#7a7a8e;margin-top:14px;line-height:1.6">Git, GitHub, VS Code, Postman, DevTools</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== EXPERIENCE ===== -->
+<section id="experience" style="position:relative;padding:96px 24px;overflow:hidden">
+    <div style="max-width:900px;margin:0 auto;position:relative;z-index:5">
+        <div style="text-align:center;margin-bottom:64px" class="reveal">
+            <p style="font-family:'JetBrains Mono';font-size:10px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px">
+                <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-right:8px"></span>03 — Experience
+                <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-left:8px"></span>
+            </p>
+            <h2 style="font-family:'Space Grotesk';font-size:clamp(28px,4vw,42px);font-weight:700;color:white">Where I've Worked<span style="color:#8b5cf6">.</span></h2>
+        </div>
+
+        <div style="position:relative;padding-left:32px" class="timeline-wrap">
+            <div class="timeline-line" style="position:absolute;left:6px;top:0;bottom:0"></div>
+
+            <!-- Exp 1 -->
+            <div style="position:relative;margin-bottom:56px" class="reveal-left">
+                <div class="timeline-dot active" style="position:absolute;left:-32px;top:6px"></div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:8px">
+                    <span style="font-family:'JetBrains Mono';font-size:10px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.1em">May 2023 — Present</span>
+                    <span style="padding:3px 10px;border:1px solid rgba(34,197,94,0.3);border-radius:99px;font-family:'JetBrains Mono';font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:0.05em">Current</span>
+                </div>
+                <h3 style="font-family:'Space Grotesk';font-size:22px;font-weight:600;color:white">Frontend Developer</h3>
+                <p style="font-size:14px;color:#a78bfa;font-weight:500;margin:4px 0 16px">Adeye Tech LLP</p>
+                <div class="card" style="padding:24px">
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+                        <li style="font-size:13px;color:#7a7a8e;line-height:1.6;display:flex;gap:10px;align-items:flex-start">
+                            <iconify-icon icon="mdi:chevron-right" style="color:#8b5cf6;font-size:16px;margin-top:2px;flex-shrink:0"></iconify-icon>
+                            Built and maintained 4+ production-grade React.js applications
+                        </li>
+                        <li style="font-size:13px;color:#7a7a8e;line-height:1.6;display:flex;gap:10px;align-items:flex-start">
+                            <iconify-icon icon="mdi:chevron-right" style="color:#8b5cf6;font-size:16px;margin-top:2px;flex-shrink:0"></iconify-icon>
+                            Developed vehicle service management dashboards with real-time data
+                        </li>
+                        <li style="font-size:13px;color:#7a7a8e;line-height:1.6;display:flex;gap:10px;align-items:flex-start">
+                            <iconify-icon icon="mdi:chevron-right" style="color:#8b5cf6;font-size:16px;margin-top:2px;flex-shrink:0"></iconify-icon>
+                            Implemented car damage detection UI with image upload & QR registration
+                        </li>
+                        <li style="font-size:13px;color:#7a7a8e;line-height:1.6;display:flex;gap:10px;align-items:flex-start">
+                            <iconify-icon icon="mdi:chevron-right" style="color:#8b5cf6;font-size:16px;margin-top:2px;flex-shrink:0"></iconify-icon>
+                            Collaborated with backend team for API integration (PHP Laravel)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Exp 2 -->
+            <div style="position:relative;margin-bottom:16px" class="reveal-right">
+                <div class="timeline-dot" style="position:absolute;left:-32px;top:6px"></div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:8px">
+                    <span style="font-family:'JetBrains Mono';font-size:10px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em">Dec 2022 — Apr 2023</span>
+                </div>
+                <h3 style="font-family:'Space Grotesk';font-size:22px;font-weight:600;color:white">Frontend Developer (Intern)</h3>
+                <p style="font-size:14px;color:#7a7a8e;font-weight:500;margin:4px 0 16px">Sapphire Infocom Pvt Ltd</p>
+                <div class="card" style="padding:24px">
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+                        <li style="font-size:13px;color:#7a7a8e;line-height:1.6;display:flex;gap:10px;align-items:flex-start">
+                            <iconify-icon icon="mdi:chevron-right" style="color:#8b5cf6;font-size:16px;margin-top:2px;flex-shrink:0"></iconify-icon>
+                            Developed BrandStore e-commerce web app using React.js
+                        </li>
+                        <li style="font-size:13px;color:#7a7a8e;line-height:1.6;display:flex;gap:10px;align-items:flex-start">
+                            <iconify-icon icon="mdi:chevron-right" style="color:#8b5cf6;font-size:16px;margin-top:2px;flex-shrink:0"></iconify-icon>
+                            Built admin panel with charts & data visualization (Chart.js)
+                        </li>
+                        <li style="font-size:13px;color:#7a7a8e;line-height:1.6;display:flex;gap:10px;align-items:flex-start">
+                            <iconify-icon icon="mdi:chevron-right" style="color:#8b5cf6;font-size:16px;margin-top:2px;flex-shrink:0"></iconify-icon>
+                            Implemented Redux for global state management
+                        </li>
+                        <li style="font-size:13px;color:#7a7a8e;line-height:1.6;display:flex;gap:10px;align-items:flex-start">
+                            <iconify-icon icon="mdi:chevron-right" style="color:#8b5cf6;font-size:16px;margin-top:2px;flex-shrink:0"></iconify-icon>
+                            Gained hands-on experience with Material-UI
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects" style="position:relative;padding:96px 24px;overflow:hidden">
+    <div class="radial-glow" style="position:absolute;inset:0;pointer-events:none"></div>
+    <div style="max-width:1100px;margin:0 auto;position:relative;z-index:5">
+        <div style="text-align:center;margin-bottom:64px" class="reveal">
+            <p style="font-family:'JetBrains Mono';font-size:10px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px">
+                <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-right:8px"></span>04 — Projects
+                <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-left:8px"></span>
+            </p>
+            <h2 style="font-family:'Space Grotesk';font-size:clamp(28px,4vw,42px);font-weight:700;color:white">Featured Work<span style="color:#8b5cf6">.</span></h2>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+            <!-- Project 1 -->
+            <div class="project-card reveal" style="padding:32px;transition-delay:0s" onclick="showProjectDetail(0)">
+                <div class="project-bg" style="background:radial-gradient(ellipse at 0% 50%,rgba(139,92,246,0.06),transparent 70%)"></div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px;position:relative;z-index:2">
+                    <span class="project-num" style="font-family:'Space Grotesk';font-size:56px;font-weight:700;color:rgba(255,255,255,0.05);flex-shrink:0">01</span>
+                    <div style="flex:1;min-width:240px">
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px">
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.1em;padding:3px 10px;border:1px solid rgba(139,92,246,0.25);border-radius:99px">Adeye Tech</span>
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e">2023 — Present</span>
+                        </div>
+                        <h3 style="font-family:'Space Grotesk';font-size:20px;font-weight:600;color:white;margin-bottom:8px">XpertSpeed Workshop Mobile App</h3>
+                        <p style="font-size:13px;color:#7a7a8e;line-height:1.6;margin-bottom:14px">Vehicle service management — appointment booking, service tracking, customer management.</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px">
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">ReactJS</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">Material-UI</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">REST API</span>
+                        </div>
+                    </div>
+                    <iconify-icon icon="mdi:arrow-right" class="project-arrow" style="font-size:28px;color:#7a7a8e;flex-shrink:0"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card reveal" style="padding:32px;transition-delay:0.08s" onclick="showProjectDetail(1)">
+                <div class="project-bg" style="background:radial-gradient(ellipse at 0% 50%,rgba(6,182,212,0.06),transparent 70%)"></div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px;position:relative;z-index:2">
+                    <span class="project-num" style="font-family:'Space Grotesk';font-size:56px;font-weight:700;color:rgba(255,255,255,0.05);flex-shrink:0">02</span>
+                    <div style="flex:1;min-width:240px">
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px">
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.1em;padding:3px 10px;border:1px solid rgba(139,92,246,0.25);border-radius:99px">Adeye Tech</span>
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e">2023 — Present</span>
+                        </div>
+                        <h3 style="font-family:'Space Grotesk';font-size:20px;font-weight:600;color:white;margin-bottom:8px">DriveNscan Dashboard & Mobile App</h3>
+                        <p style="font-size:13px;color:#7a7a8e;line-height:1.6;margin-bottom:14px">Car damage detection — cost estimation, report generation, QR registration & damage mapping.</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px">
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">ReactJS</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">PHP Laravel</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">MySQL</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">QR Code</span>
+                        </div>
+                    </div>
+                    <iconify-icon icon="mdi:arrow-right" class="project-arrow" style="font-size:28px;color:#7a7a8e;flex-shrink:0"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card reveal" style="padding:32px;transition-delay:0.16s" onclick="showProjectDetail(2)">
+                <div class="project-bg" style="background:radial-gradient(ellipse at 0% 50%,rgba(234,179,8,0.06),transparent 70%)"></div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px;position:relative;z-index:2">
+                    <span class="project-num" style="font-family:'Space Grotesk';font-size:56px;font-weight:700;color:rgba(255,255,255,0.05);flex-shrink:0">03</span>
+                    <div style="flex:1;min-width:240px">
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px">
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;padding:3px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:99px">Sapphire Infocom</span>
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e">2022 — 2023</span>
+                        </div>
+                        <h3 style="font-family:'Space Grotesk';font-size:20px;font-weight:600;color:white;margin-bottom:8px">BrandStore — E-Commerce Web App</h3>
+                        <p style="font-size:13px;color:#7a7a8e;line-height:1.6;margin-bottom:14px">Full shopping platform — product browsing, cart, checkout, order tracking with Redux state.</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px">
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">React.js</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">Redux</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">Material-UI</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">Chart.js</span>
+                        </div>
+                    </div>
+                    <iconify-icon icon="mdi:arrow-right" class="project-arrow" style="font-size:28px;color:#7a7a8e;flex-shrink:0"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="project-card reveal" style="padding:32px;transition-delay:0.24s" onclick="showProjectDetail(3)">
+                <div class="project-bg" style="background:radial-gradient(ellipse at 0% 50%,rgba(236,72,153,0.06),transparent 70%)"></div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px;position:relative;z-index:2">
+                    <span class="project-num" style="font-family:'Space Grotesk';font-size:56px;font-weight:700;color:rgba(255,255,255,0.05);flex-shrink:0">04</span>
+                    <div style="flex:1;min-width:240px">
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px">
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;padding:3px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:99px">Sapphire Infocom</span>
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e">2022 — 2023</span>
+                        </div>
+                        <h3 style="font-family:'Space Grotesk';font-size:20px;font-weight:600;color:white;margin-bottom:8px">Admin Panel — Analytics Dashboard</h3>
+                        <p style="font-size:13px;color:#7a7a8e;line-height:1.6;margin-bottom:14px">Data visualization, user management, sales analytics, real-time reporting with Chart.js.</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px">
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">React.js</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">Material-UI</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">Chart.js</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">DataGrid</span>
+                        </div>
+                    </div>
+                    <iconify-icon icon="mdi:arrow-right" class="project-arrow" style="font-size:28px;color:#7a7a8e;flex-shrink:0"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Project 5 -->
+            <div class="project-card reveal" style="padding:32px;transition-delay:0.32s" onclick="showProjectDetail(4)">
+                <div class="project-bg" style="background:radial-gradient(ellipse at 0% 50%,rgba(34,197,94,0.06),transparent 70%)"></div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px;position:relative;z-index:2">
+                    <span class="project-num" style="font-family:'Space Grotesk';font-size:56px;font-weight:700;color:rgba(255,255,255,0.05);flex-shrink:0">05</span>
+                    <div style="flex:1;min-width:240px">
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px">
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.1em;padding:3px 10px;border:1px solid rgba(139,92,246,0.25);border-radius:99px">Adeye Tech</span>
+                            <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e">2023</span>
+                        </div>
+                        <h3 style="font-family:'Space Grotesk';font-size:20px;font-weight:600;color:white;margin-bottom:8px">XpertSpeed Dashboard Admin Panel</h3>
+                        <p style="font-size:13px;color:#7a7a8e;line-height:1.6;margin-bottom:14px">Service appointment management, real-time tracking, customer DB, revenue analytics.</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px">
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">ReactJS</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">Material-UI</span>
+                            <span class="project-tag" style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">REST API</span>
+                        </div>
+                    </div>
+                    <iconify-icon icon="mdi:arrow-right" class="project-arrow" style="font-size:28px;color:#7a7a8e;flex-shrink:0"></iconify-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" style="position:relative;padding:96px 24px;overflow:hidden">
+    <div class="radial-glow-cyan" style="position:absolute;inset:0;pointer-events:none"></div>
+    <div style="max-width:1000px;margin:0 auto;position:relative;z-index:5">
+        <div style="text-align:center;margin-bottom:64px" class="reveal">
+            <p style="font-family:'JetBrains Mono';font-size:10px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px">
+                <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-right:8px"></span>05 — Contact
+                <span style="display:inline-block;width:20px;height:1px;background:#8b5cf6;vertical-align:middle;margin-left:8px"></span>
+            </p>
+            <h2 style="font-family:'Space Grotesk';font-size:clamp(28px,4vw,42px);font-weight:700;color:white;margin-bottom:12px">Let's Connect<span style="color:#8b5cf6">.</span></h2>
+            <p style="font-size:14px;color:#7a7a8e;max-width:440px;margin:0 auto">Have a project in mind? I'd love to hear about it.</p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr;gap:32px" class="md-grid-2col">
+            <!-- Contact Info -->
+            <div style="display:flex;flex-direction:column;gap:16px" class="reveal-left">
+                <a href="tel:+917600764647" class="card" style="padding:20px;display:flex;align-items:center;gap:16px;text-decoration:none;cursor:pointer">
+                    <div style="width:48px;height:48px;border-radius:10px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                        <iconify-icon icon="mdi:phone-outline" style="color:#8b5cf6;font-size:20px"></iconify-icon>
+                    </div>
+                    <div>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em">Phone</p>
+                        <p style="font-size:14px;color:white;font-weight:500;margin-top:2px">+91 76007 64647</p>
+                    </div>
+                    <iconify-icon icon="mdi:arrow-top-right" style="color:#7a7a8e;font-size:18px;margin-left:auto;flex-shrink:0"></iconify-icon>
+                </a>
+
+                <a href="mailto:dhruvinvasoyawork@gmail.com" class="card" style="padding:20px;display:flex;align-items:center;gap:16px;text-decoration:none;cursor:pointer">
+                    <div style="width:48px;height:48px;border-radius:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                        <iconify-icon icon="mdi:email-outline" style="color:#06b6d4;font-size:20px"></iconify-icon>
+                    </div>
+                    <div>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em">Email</p>
+                        <p style="font-size:14px;color:white;font-weight:500;margin-top:2px;word-break:break-all">dhruvinvasoyawork@gmail.com</p>
+                    </div>
+                    <iconify-icon icon="mdi:arrow-top-right" style="color:#7a7a8e;font-size:18px;margin-left:auto;flex-shrink:0"></iconify-icon>
+                </a>
+
+                <div class="card" style="padding:20px;display:flex;align-items:center;gap:16px;cursor:default">
+                    <div style="width:48px;height:48px;border-radius:10px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                        <iconify-icon icon="mdi:map-marker-outline" style="color:#fbbf24;font-size:20px"></iconify-icon>
+                    </div>
+                    <div>
+                        <p style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em">Location</p>
+                        <p style="font-size:14px;color:white;font-weight:500;margin-top:2px">Vadodara, Gujarat, India</p>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:10px;margin-top:8px">
+                    <a href="https://wa.me/917600764647" target="_blank" style="width:44px;height:44px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#7a7a8e;text-decoration:none;transition:all 0.3s" onmouseover="this.style.borderColor='#8b5cf6';this.style.color='#8b5cf6';this.style.background='rgba(139,92,246,0.1)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='#7a7a8e';this.style.background='transparent'">
+                        <iconify-icon icon="mdi:whatsapp" style="font-size:20px"></iconify-icon>
+                    </a>
+                    <a href="#" target="_blank" style="width:44px;height:44px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#7a7a8e;text-decoration:none;transition:all 0.3s" onmouseover="this.style.borderColor='#8b5cf6';this.style.color='#8b5cf6';this.style.background='rgba(139,92,246,0.1)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='#7a7a8e';this.style.background='transparent'">
+                        <iconify-icon icon="mdi:github" style="font-size:20px"></iconify-icon>
+                    </a>
+                    <a href="#" target="_blank" style="width:44px;height:44px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#7a7a8e;text-decoration:none;transition:all 0.3s" onmouseover="this.style.borderColor='#8b5cf6';this.style.color='#8b5cf6';this.style.background='rgba(139,92,246,0.1)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='#7a7a8e';this.style.background='transparent'">
+                        <iconify-icon icon="mdi:linkedin" style="font-size:20px"></iconify-icon>
+                    </a>
+                    <a href="#" target="_blank" style="width:44px;height:44px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#7a7a8e;text-decoration:none;transition:all 0.3s" onmouseover="this.style.borderColor='#8b5cf6';this.style.color='#8b5cf6';this.style.background='rgba(139,92,246,0.1)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='#7a7a8e';this.style.background='transparent'">
+                        <iconify-icon icon="mdi:twitter" style="font-size:20px"></iconify-icon>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="reveal-right">
+                <form id="contactForm" class="card" style="padding:32px;position:relative;overflow:hidden" novalidate>
+                    <div class="scan-line" style="animation-duration:9s"></div>
+                    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:20px">
+                        <div>
+                            <label style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:8px">Name *</label>
+                            <input type="text" id="formName" class="input-field" placeholder="Your Name" autocomplete="name">
+                            <p class="error-msg" id="nameError">Please enter your name</p>
+                        </div>
+                        <div>
+                            <label style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:8px">Email *</label>
+                            <input type="email" id="formEmail" class="input-field" placeholder="your@email.com" autocomplete="email">
+                            <p class="error-msg" id="emailError">Please enter a valid email</p>
+                        </div>
+                        <div>
+                            <label style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:8px">Message *</label>
+                            <textarea id="formMsg" class="input-field" placeholder="Tell me about your project..." rows="4" style="resize:none"></textarea>
+                            <p class="error-msg" id="msgError">Please enter a message</p>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px" id="submitBtn">
+                            <span id="submitText">Send Message</span>
+                            <iconify-icon icon="mdi:send" style="font-size:16px" id="submitIcon"></iconify-icon>
+                            <div id="submitSpinner" style="display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top:2px solid white;border-radius:50%;animation:spin 0.6s linear infinite"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer style="border-top:1px solid rgba(255,255,255,0.04);padding:32px 24px;position:relative;z-index:5">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+        <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);display:flex;align-items:center;justify-content:center">
+                <span style="color:white;font-family:'Space Grotesk';font-weight:700;font-size:10px">DV</span>
+            </div>
+            <span style="font-size:12px;color:#7a7a8e">© 2024 Dhruvin Vasoya</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+            <div class="status-dot" style="width:6px;height:6px"></div>
+            <span style="font-family:'JetBrains Mono';font-size:9px;color:#7a7a8e;text-transform:uppercase;letter-spacing:0.1em">Built with React Love</span>
+        </div>
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="background:none;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:8px 16px;color:#7a7a8e;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.3s;font-family:'Inter',sans-serif" onmouseover="this.style.borderColor='#8b5cf6';this.style.color='#8b5cf6'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='#7a7a8e'">
+            Back to Top <iconify-icon icon="mdi:arrow-up" style="font-size:14px"></iconify-icon>
+        </button>
+    </div>
+</footer>
+
+<!-- PROJECT DETAIL MODAL -->
+<div id="projectModal" style="position:fixed;inset:0;z-index:200;background:rgba(5,5,8,0.9);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:all 0.4s cubic-bezier(0.16,1,0.3,1)">
+    <div id="modalContent" style="max-width:640px;width:100%;max-height:80vh;overflow-y:auto;border:1px solid rgba(139,92,246,0.2);border-radius:16px;background:#0c0c14;padding:40px;position:relative;transform:translateY(30px) scale(0.95);transition:all 0.4s cubic-bezier(0.16,1,0.3,1)">
+        <button onclick="closeProjectModal()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#7a7a8e;cursor:pointer;transition:all 0.3s;font-size:18px" onmouseover="this.style.color='white';this.style.borderColor='#8b5cf6'" onmouseout="this.style.color='#7a7a8e';this.style.borderColor='rgba(255,255,255,0.08)'">
+            <iconify-icon icon="mdi:close"></iconify-icon>
+        </button>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast toast-success">
+    <iconify-icon icon="mdi:check-circle" style="font-size:20px"></iconify-icon>
+    <span id="toastMsg">Message sent successfully!</span>
+</div>
+
+<script>
+// ===== PROJECT DATA =====
+const projects = [
+    {
+        title: 'XpertSpeed Workshop Mobile App',
+        company: 'Adeye Tech LLP',
+        period: '2023 — Present',
+        desc: 'A comprehensive vehicle service management mobile application designed to streamline workshop operations. Features include real-time appointment booking, service tracking with status updates, customer database management, and service catalog browsing.',
+        features: ['Vehicle appointment scheduling', 'Real-time service status tracking', 'Customer management system', 'Service catalog & pricing', 'Push notifications for updates'],
+        tech: ['ReactJS', 'Material-UI', 'REST API', 'Responsive Design']
+    },
+    {
+        title: 'DriveNscan Dashboard & Mobile App',
+        company: 'Adeye Tech LLP',
+        period: '2023 — Present',
+        desc: 'An intelligent car damage detection and analysis system. The dashboard provides cost estimation, report generation, and analytics. The mobile app enables image upload, QR code registration for vehicles, and damage mapping with visual annotations.',
+        features: ['Car damage detection UI', 'Image upload & annotation', 'QR code vehicle registration', 'Cost estimation & reporting', 'Dashboard analytics'],
+        tech: ['ReactJS', 'PHP Laravel', 'MySQL', 'QR Code API', 'Image Processing']
+    },
+    {
+        title: 'BrandStore — E-Commerce Web App',
+        company: 'Sapphire Infocom Pvt Ltd',
+        period: '2022 — 2023',
+        desc: 'A full-featured e-commerce shopping platform with product browsing, search & filtering, shopping cart with Redux state management, secure checkout flow, and order tracking system.',
+        features: ['Product catalog with filters', 'Redux-powered shopping cart', 'Secure checkout flow', 'Order tracking system', 'User authentication'],
+        tech: ['React.js', 'Redux', 'Material-UI', 'Chart.js', 'REST API']
+    },
+    {
+        title: 'Admin Panel — Analytics Dashboard',
+        company: 'Sapphire Infocom Pvt Ltd',
+        period: '2022 — 2023',
+        desc: 'A comprehensive admin dashboard featuring data visualization with Chart.js, user management with roles & permissions, sales analytics with date range filtering, and real-time reporting capabilities.',
+        features: ['Data visualization charts', 'User role management', 'Sales analytics & reports', 'DataGrid with sorting/filtering', 'Real-time data updates'],
+        tech: ['React.js', 'Material-UI', 'Chart.js', 'DataGrid', 'REST API']
+    },
+    {
+        title: 'XpertSpeed Dashboard Admin Panel',
+        company: 'Adeye Tech LLP',
+        period: '2023',
+        desc: 'An admin panel for managing service appointments, tracking revenue, managing customer databases, and monitoring workshop performance through interactive charts and data tables.',
+        features: ['Service appointment management', 'Revenue analytics dashboard', 'Customer database management', 'Service catalog admin', 'Performance metrics'],
+        tech: ['ReactJS', 'Material-UI', 'REST API', 'Chart.js', 'DataGrid']
+    }
+];
+
+function showProjectDetail(i) {
+    const p = projects[i];
+    const modal = document.getElementById('projectModal');
+    const content = document.getElementById('modalContent');
+    const body = document.getElementById('modalBody');
+    body.innerHTML = `
+        <span style="font-family:'JetBrains Mono';font-size:9px;color:#8b5cf6;text-transform:uppercase;letter-spacing:0.1em">${p.company} — ${p.period}</span>
+        <h2 style="font-family:'Space Grotesk';font-size:28px;font-weight:700;color:white;margin:12px 0 16px;line-height:1.2">${p.title}</h2>
+        <p style="font-size:14px;color:#7a7a8e;line-height:1.7;margin-bottom:24px">${p.desc}</p>
+        <h4 style="font-family:'JetBrains Mono';font-size:10px;color:white;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px">Key Features</h4>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+            ${p.features.map(f => `<li style="font-size:13px;color:#7a7a8e;display:flex;gap:10px;align-items:flex-start"><iconify-icon icon="mdi:check-circle" style="color:#8b5cf6;font-size:16px;margin-top:1px;flex-shrink:0"></iconify-icon>${f}</li>`).join('')}
+        </ul>
+        <h4 style="font-family:'JetBrains Mono';font-size:10px;color:white;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px">Tech Stack</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">${p.tech.map(t => `<span style="padding:6px 14px;border:1px solid rgba(139,92,246,0.25);border-radius:99px;font-family:'JetBrains Mono';font-size:10px;color:#a78bfa;text-transform:uppercase;letter-spacing:0.05em">${t}</span>`).join('')}</div>
+    `;
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'all';
+    content.style.transform = 'translateY(0) scale(1)';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProjectModal() {
+    const modal = document.getElementById('projectModal');
+    const content = document.getElementById('modalContent');
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+    content.style.transform = 'translateY(30px) scale(0.95)';
+    document.body.style.overflow = '';
+}
+document.getElementById('projectModal').addEventListener('click', function(e) {
+    if (e.target === this) closeProjectModal();
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeProjectModal();
+});
+
+// ===== PRELOADER =====
+let prog = 0;
+const loaderNum = document.getElementById('loaderNum');
+const preloader = document.getElementById('preloader');
+const loadInt = setInterval(() => {
+    prog += Math.random() * 12 + 4;
+    if (prog >= 100) {
+        prog = 100;
+        clearInterval(loadInt);
+        loaderNum.textContent = '100';
+        setTimeout(() => {
+            gsap.to(preloader, { yPercent: -100, duration: 0.8, ease: 'power4.inOut', onComplete: () => {
+                preloader.style.display = 'none';
+                initRevealAnimations();
+            }});
+        }, 300);
+    } else {
+        loaderNum.textContent = Math.floor(prog);
+    }
+}, 80);
+
+// ===== CURSOR =====
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx - 2.5 + 'px'; dot.style.top = my - 2.5 + 'px'; });
+(function cursorLoop() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px'; requestAnimationFrame(cursorLoop); })();
+document.querySelectorAll('a,button,.card,.project-card,input,textarea,.btn-primary,.btn-outline').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
+
+// ===== PARTICLES =====
+const cv = document.getElementById('particlesBg');
+const cx = cv.getContext('2d');
+let pts = [];
+function resizeCv() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
+resizeCv(); window.addEventListener('resize', resizeCv);
+class Pt {
+    constructor() { this.reset(); }
+    reset() { this.x = Math.random() * cv.width; this.y = Math.random() * cv.height; this.s = Math.random() * 1.5 + 0.3; this.vx = (Math.random() - 0.5) * 0.25; this.vy = (Math.random() - 0.5) * 0.25; this.o = Math.random() * 0.4 + 0.1; this.l = Math.random() * 300 + 150; this.ml = this.l; }
+    update() { this.x += this.vx; this.y += this.vy; this.l--; if (this.l <= 0 || this.x < 0 || this.x > cv.width || this.y < 0 || this.y > cv.height) this.reset(); }
+    draw() { const a = (this.l / this.ml) * this.o; cx.beginPath(); cx.arc(this.x, this.y, this.s, 0, Math.PI * 2); cx.fillStyle = `rgba(139,92,246,${a})`; cx.fill(); }
+}
+for (let i = 0; i < 50; i++) pts.push(new Pt());
+(function animPts() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    pts.forEach(p => { p.update(); p.draw(); });
+    for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 100) { cx.beginPath(); cx.moveTo(pts[i].x, pts[i].y); cx.lineTo(pts[j].x, pts[j].y); cx.strokeStyle = `rgba(139,92,246,${0.04 * (1 - d / 100)})`; cx.lineWidth = 0.5; cx.stroke(); }
+    }
+    requestAnimationFrame(animPts);
+})();
+
+// ===== TYPING =====
+const words = ['React.js', 'Redux', 'Material-UI', 'Clean Code', 'Responsive UI', 'Component Architecture'];
+let wi = 0, ci = 0, del = false;
+const typeEl = document.getElementById('typeTarget');
+(function typeLoop() {
+    const w = words[wi];
+    typeEl.textContent = del ? w.substring(0, ci - 1) : w.substring(0, ci + 1);
+    del ? ci-- : ci++;
+    let sp = del ? 35 : 70;
+    if (!del && ci === w.length) { sp = 2200; del = true; }
+    else if (del && ci === 0) { del = false; wi = (wi + 1) % words.length; sp = 350; }
+    setTimeout(typeLoop, sp);
+})();
+
+// ===== SCROLL PROGRESS =====
+window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('scrollProgress').style.width = (window.scrollY / h * 100) + '%';
+});
+
+// ===== NAVBAR HIDE/SHOW =====
+let lastY = 0;
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastY && y > 200) nav.style.transform = 'translateY(-100%)';
+    else nav.style.transform = 'translateY(0)';
+    lastY = y;
+});
+
+// ===== ACTIVE NAV LINK =====
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link[data-section]');
+window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; });
+    navLinks.forEach(l => { l.classList.toggle('active', l.dataset.section === cur); });
+});
+
+// ===== MOBILE DRAWER =====
+const drawer = document.getElementById('mobileDrawer');
+const overlay = document.getElementById('mobileOverlay');
+function openDrawer() { drawer.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeDrawer() { drawer.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('openDrawer').addEventListener('click', openDrawer);
+document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', closeDrawer));
+
+// ===== SHOW NAV HIRE BTN ON DESKTOP =====
+if (window.innerWidth >= 768) document.getElementById('navHireBtn').style.display = 'inline-flex';
+
+// ===== RESPONSIVE GRID =====
+function handleGrid() {
+    document.querySelectorAll('.md-grid-2col').forEach(el => {
+        el.style.gridTemplateColumns = window.innerWidth >= 768 ? '1fr 1.2fr' : '1fr';
+    });
+}
+handleGrid(); window.addEventListener('resize', handleGrid);
+
+// ===== SHOW HIDE DRAWER BTN ON MOBILE =====
+function handleDrawerBtn() {
+    document.getElementById('openDrawer').style.display = window.innerWidth >= 768 ? 'none' : 'flex';
+}
+handleDrawerBtn(); window.addEventListener('resize', handleDrawerBtn);
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+        e.preventDefault();
+        const t = document.querySelector(this.getAttribute('href'));
+        if (t) {
+            const y = t.getBoundingClientRect().top + window.scrollY - 72;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    });
+});
+
+// ===== RIPPLE EFFECT =====
+document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        const r = document.createElement('span');
+        r.classList.add('ripple');
+        const rect = this.getBoundingClientRect();
+        r.style.left = (e.clientX - rect.left) + 'px';
+        r.style.top = (e.clientY - rect.top) + 'px';
+        r.style.width = r.style.height = Math.max(rect.width, rect.height) + 'px';
+        this.appendChild(r);
+        setTimeout(() => r.remove(), 600);
+    });
+});
+
+// ===== REVEAL ON SCROLL =====
+function initRevealAnimations() {
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = entry.target.style.transitionDelay || '0s';
+                entry.target.style.transitionDelay = delay;
+                entry.target.classList.add('visible');
+                // Skill bars
+                if (entry.target.hasAttribute('data-skill')) {
+                    const bar = entry.target.querySelector('.skill-fill');
+                    if (bar) setTimeout(() => { bar.style.width = bar.dataset.width; }, 200);
+                }
+                // Counters
+                entry.target.querySelectorAll('.counter').forEach(c => {
+                    const target = parseInt(c.dataset.target);
+                    gsap.to({ v: 0 }, { v: target, duration: 2, ease: 'power2.out', onUpdate: function() { c.textContent = Math.floor(this.targets()[0].v) + '+'; }});
+                });
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, [data-skill]').forEach(el => obs.observe(el));
+}
+
+// ===== CONTACT FORM =====
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let valid = true;
+    const name = document.getElementById('formName');
+    const email = document.getElementById('formEmail');
+    const msg = document.getElementById('formMsg');
+
+    // Reset
+    [name, email, msg].forEach(f => f.classList.remove('error'));
+    document.querySelectorAll('.error-msg').forEach(m => m.classList.remove('show'));
+
+    if (!name.value.trim()) {
+        name.classList.add('error');
+        document.getElementById('nameError').classList.add('show');
+        valid = false;
+    }
+    if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        email.classList.add('error');
+        document.getElementById('emailError').classList.add('show');
+        valid = false;
+    }
+    if (!msg.value.trim()) {
+        msg.classList.add('error');
+        document.getElementById('msgError').classList.add('show');
+        valid = false;
+    }
+
+    if (!valid) {
+        showToast('Please fill in all fields correctly', 'error');
+        return;
+    }
+
+    // Simulate sending
+    const btn = document.getElementById('submitBtn');
+    const txt = document.getElementById('submitText');
+    const ico = document.getElementById('submitIcon');
+    const spin = document.getElementById('submitSpinner');
+    btn.disabled = true; txt.textContent = 'Sending...'; ico.style.display = 'none'; spin.style.display = 'block';
+
+    setTimeout(() => {
+        btn.disabled = false; txt.textContent = 'Send Message'; ico.style.display = ''; spin.style.display = 'none';
+        name.value = ''; email.value = ''; msg.value = '';
+        showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
+    }, 1500);
+});
+
+// Clear error on input
+['formName', 'formEmail', 'formMsg'].forEach(id => {
+    document.getElementById(id).addEventListener('input', function() {
+        this.classList.remove('error');
+        this.nextElementSibling.classList.remove('show');
+    });
+});
+
+// ===== TOAST =====
+function showToast(message, type) {
+    const t = document.getElementById('toast');
+    const m = document.getElementById('toastMsg');
+    m.textContent = message;
+    t.className = 'toast toast-' + type + ' show';
+    const icon = t.querySelector('iconify-icon');
+    icon.setAttribute('icon', type === 'success' ? 'mdi:check-circle' : 'mdi:alert-circle');
+    setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// ===== 3D TILT ON CARDS =====
+document.querySelectorAll('.card, .project-card').forEach(card => {
+    card.addEventListener('mousemove', function(e) {
+        if (window.innerWidth < 768) return;
+        const r = this.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        this.style.transform = `translateY(-6px) perspective(800px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+    });
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = '';
+    });
+});
+
+// ===== PARALLAX ON FLOATING BADGES =====
+window.addEventListener('mousemove', e => {
+    if (window.innerWidth < 768) return;
+    const x = (e.clientX / window.innerWidth - 0.5) * 2;
+    const y = (e.clientY / window.innerHeight - 0.5) * 2;
+    const b1 = document.getElementById('badge1');
+    const b2 = document.getElementById('badge2');
+    if (b1) b1.style.transform = `translate(${x * 15}px, ${y * 10}px)`;
+    if (b2) b2.style.transform = `translate(${x * -10}px, ${y * -15}px)`;
+});
+</script>
+</body>
+</html>
